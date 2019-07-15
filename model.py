@@ -21,17 +21,17 @@ def inference(inputs, params, is_training=True):
                         normalizer_params=batch_norm_params,
                         ):
         x = tf.reshape(inputs, [-1, 28, 100, 1])
-        net = slim.conv2d(x, int(params['hidden_size']*(params['progression']**1)), params['kernel_size'], scope='conv1')
+        net = slim.conv2d(x, params['output_size'][0], params['kernel_size'], scope='conv1')
         net = slim.max_pool2d(net, [2, 2], scope='pool1')
-        net = slim.conv2d(net, int(params['hidden_size']*(params['progression']**2)), params['kernel_size'], scope='conv2')
+        net = slim.conv2d(net, params['output_size'][1], params['kernel_size'], scope='conv2')
         net = slim.max_pool2d(net, [2, 2], scope='pool2')
-        net = slim.conv2d(net, int(params['hidden_size']*(params['progression']**3)), params['kernel_size'], scope='conv3')
+        net = slim.conv2d(net, params['output_size'][2], params['kernel_size'], scope='conv3')
         net = slim.max_pool2d(net, [7, 2], scope='pool3')
         # net = slim.conv2d(net, [7, 3], scope='fully_conv', padding='VALID')
         net = tf.squeeze(net, axis=1)
-        net = slim.fully_connected(net, int(params['hidden_size']*(params['progression']**4)), scope='fc1')
+        net = slim.fully_connected(net, params['output_size'][3], scope='fc1')
         net = slim.dropout(net, params['drop_out'])
-        net = slim.fully_connected(net, int(params['hidden_size']*(params['progression']**5)), scope='fc2')
+        net = slim.fully_connected(net, params['output_size'][4], scope='fc2')
         net = slim.dropout(net, params['drop_out'])
         outputs = slim.fully_connected(net, 11, activation_fn=None, normalizer_fn=None, scope='fco')
         return outputs

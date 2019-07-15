@@ -30,16 +30,20 @@ def get_next_model_dir():
 
     return 'model_directory/model_' + str(last_model + 1)
 
+def generate_output_size(h,p):
+    output = [int(h*(p**n)) for n in range(0,5)]
+    print(output)
+    return output
 
 def get_params(dict):
     idx = random.randint(0, len(dict))
     print(len(dict))
     params_rnd = dict.pop(idx)
+    output_size = generate_output_size(params_rnd[2],params_rnd[3])
     hparams = {
         'learning_rate':params_rnd[0],
         'drop_out':params_rnd[1],
-        'hidden_size':params_rnd[2],
-        'progression': params_rnd[3],
+        'output_size': output_size ,
         'kernel_size': [params_rnd[4],params_rnd[4]],
     }
     return hparams
